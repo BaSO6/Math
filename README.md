@@ -113,13 +113,11 @@ LLM 侧模板：
 | **③ Semantic Sentence Embedding**   | 混合语句向量 $e(\cdot)$（自然语言+符号混合）           | SentenceBERT-Lean：SciBERT 初始化 + 命题对比学习（相似命题语义对比）                   | 768          | • 语义对齐奖励 $\mathcal{A}_\gamma$ <br> • 题目-引理语义匹配 <br> • 结果生成的人工可读性评估                   |
 
 ## 总奖励函数 $R^{\dagger}$ —— 完整公式与各子项计算细节
-
-$$
+\[
 \boxed{
-\displaystyle
-R^{\dagger}
-=
-\underbrace{
+\begin{aligned}
+R^{\dagger} =\ 
+&\underbrace{
 \bigl(
 w_c\mathcal{C}
 +w_p\mathcal{P}
@@ -127,28 +125,29 @@ w_c\mathcal{C}
 +w_f\mathcal{F}_{\text{DR}}
 +w_n\mathcal{N}_{\text{fit}}
 \bigr)
-}_{\text{基础五项}}
-\;
-+\;
-\underbrace{
+}_{\text{基础五项：约束、子目标、效率、重用、拟合}}
+\\[0.5em]
++\
+&\underbrace{
 \lambda_1\mathcal{S}_{\text{KL}}
 +\lambda_2\mathcal{R}_{\alpha}
 +\lambda_3\mathcal{C}_{\beta}
 +\lambda_4\mathcal{A}_{\gamma}
 +\lambda_5\mathcal{U}_{\sigma}
-}_{\text{贝叶斯 - 信息 - 语义五项}}
-\;
-+\;
-\underbrace{
+}_{\text{贝叶斯 - 信息 - 语义五项：分布、压缩、对齐、不确定性}}
+\\[0.5em]
++\
+&\underbrace{
 w_k\mathcal{K}_c
 -w_h\mathcal{H}_{\text{clause}}
 +w_{\text{pre}}\mathcal{K}_{\text{pre}}
 +w_u\mathcal{U}
 +w_{\text{nov}}\mathcal{N}_{\text{BNG}}
 +w_g\mathcal{G}
-}_{\text{知识图谱 - 结构六项}}
+}_{\text{知识图谱 - 结构六项：先验、复杂度、结构潜力、图距离}}
+\end{aligned}
 }
-$$
+\]
 
 > **说明**
 >
