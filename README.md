@@ -55,7 +55,7 @@ LLM 侧模板：
 | **推理成本**           | Lean cost 计数（如 rewrite 步数、search depth）                            | $\mathcal{U} = - \dfrac{\text{cost}}{\Delta G}$                           |
 | **图压缩**             | 使用 proof graph 的节点/边数或 gzip 长度压缩比                            | $C_\beta = 1 - \dfrac{L_{\text{zip}}}{L_{\text{raw}}}$                    |
 | **逻辑距离**           | 当前节点 $v_t$ 与目标节点 $v_{\text{goal}}$ 在 proof 图中的最短路径 $d$   | $\mathcal{G} = -d_{\text{graph}}(v_t, v_{\text{goal}})$                   |
-| **不确定性下降**       | Beta 分布的先验/后验方差：$\text{Var}_{\text{prior}}, \text{Var}_{\text{post}}$ | $\mathcal{U}_\sigma = \sum_g \left( \text{Var}_{\text{prior}} - \text{Var}_{\text{post}} \right)$ |
+| **不确定性下降**       | Beta 分布的方差：$\text{Var}_{\text{prior}},\ \text{Var}_{\text{post}}$     | $\mathcal{U}_\sigma = \sum_g \left( \text{Var}_{\text{prior}} - \text{Var}_{\text{post}} \right)$ |
 | **语义对齐**（跨模态） | 若题干为自然语言，可取 Lean AST `pretty_print` 后做 SentenceBERT 嵌入     | $A_\gamma = -\left\|e(v_t) - e_{\text{goal}}\right\|_2$                   |
 
 **要点**：所有计算只依赖 *符号树/图* + 计数器，**无需** token 概率或隐式语义。
