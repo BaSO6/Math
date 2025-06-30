@@ -104,12 +104,13 @@ LLM 侧模板：
 
 ## Connect++：验证 LLM 动作是否“一步合法”，输出局部 proof 片段与统计信息。
 
-## 本项目的embedding space
-| 层级                                | 向量是谁                                 | 生成/训练方式                                                                     | 维度 d（典型） | 主要用途                                                                                          |        |
-| --------------------------------- | ------------------------------------ | --------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------- | ------ |
-| **① Proof-Graph Embedding**       | 整个 **状态节点** $v$：包含未闭合子目标、已用定理、局部 AST | **Laplacian-GNN / GraphTransformer** 在 proof-graph 上自监督（邻居预测 + contrastive） | 256–512  | 1. 潜势函数 $\phi(v)$<br>2. ValueNet $V_\psi(s)$<br>3. Bayes-Surprise 中的 (p(QED                   | v)) 估计 |
-| **② Formula / Tactic Embedding**  | 单条定理 / tactic $\tau$ 或 AST 片段        | token-level Transformer（BPE over Lean syntax）+ mean-pool；SFT 于 mathlib 语料   | 128–256  | 1. Dirichlet-Reuse 先验统计<br>2. Action prior $P_\theta(v,\tau)$<br>3. 搜索时做 similarity retrieval |        |
-| **③ Semantic Sentence Embedding** | “自然语言/符号混合”陈述 $e(\cdot)$             | **SentenceBERT-Lean**：SciBERT 初始化→ 在 (命题, 相似命题) 对上对比学习                      | 768      | 1. 语义对齐奖励 $\mathcal{A}_\gamma$<br>2. 题目-检索最近引理<br>3. 人工评估可读性                                  |        |
+## 本项目的 embedding space
+
+| 层级                                | 向量对象                                    | 生成 / 训练方式                                                                 | 维度（典型） | 主要用途                                                                                                  |
+|-------------------------------------|---------------------------------------------|----------------------------------------------------------------------------------|--------------|-----------------------------------------------------------------------------------------------------------|
+| **① Proof-Graph Embedding**         | 整个状态节点 $v$（未闭合子目标 + 已用定理 + 局部 AST） | Laplacian-GNN / GraphTransformer 自监督（邻居预测 + 对比学习）                         | 256–512      | • 潜势函数 $\phi(v)$ <br> • ValueNet $V_\psi(s)$ <br> • Bayes Surprise 中 $p(\text{QED}\ v)$ 的估计      |
+| **② Formula / Tactic Embedding**    | 单条定理 / tactic $\tau$ 或 AST 子树片段             | token-level Transformer（Lean 语法 BPE）+ mean-pool，监督训练于 mathlib 语料           | 128–256      | • Dirichlet-Reuse 先验统计 <br> • 动作先验 $P_\theta(v, \tau)$ <br> • 检索相似引理时的 similarity 匹配    |
+| **③ Semantic Sentence Embedding**   | 混合语句向量 $e(\cdot)$（自然语言+符号混合）           | SentenceBERT-Lean：SciBERT 初始化 + 命题对比学习（相似命题语义对比）                   | 768          | • 语义对齐奖励 $\mathcal{A}_\gamma$ <br> • 题目-引理语义匹配 <br> • 结果生成的人工可读性评估                   |
 
 ## 总奖励函数 $R^{\dagger}$ —— 完整公式与各子项计算细节
 
